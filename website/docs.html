@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iainote API 文档</title>
+  <meta name="description" content="iainote API 完整文档 - AI-First 云端笔记系统 REST API">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><text x='4' y='24' font-size='20' fill='%2300ff88'>i</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+  <style>
+    .docs-layout { display: flex; gap: 0; max-width: 1100px; margin: 0 auto; padding: 40px 24px; }
+    .docs-sidebar { width: 200px; flex-shrink: 0; position: sticky; top: 80px; height: fit-content; }
+    .docs-content { flex: 1; min-width: 0; padding-left: 40px; border-left: 1px solid var(--border); }
+    .sidebar-title { font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); margin-bottom: 12px; font-family: var(--font-mono); }
+    .sidebar-link { display: block; font-size: 13px; color: var(--text-dim); text-decoration: none; padding: 5px 0; transition: color 0.15s; font-family: var(--font-mono); }
+    .sidebar-link:hover, .sidebar-link.active { color: var(--green); }
+    .api-endpoint { display: flex; align-items: center; gap: 10px; margin-bottom: 8px; }
+    .method-badge { font-family: var(--font-mono); font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 3px; }
+    .method-get { background: rgba(0,212,255,0.15); color: var(--blue); }
+    .method-post { background: rgba(0,255,136,0.15); color: var(--green); }
+    .method-delete { background: rgba(255,107,53,0.15); color: var(--orange); }
+    .method-put { background: rgba(255,215,0,0.15); color: #ffd700; }
+    .endpoint-path { font-family: var(--font-mono); font-size: 13px; color: var(--text); }
+    .api-block { background: var(--bg2); border: 1px solid var(--border); border-radius: 8px; padding: 24px; margin-bottom: 32px; }
+    .api-block h3 { font-family: var(--font-mono); font-size: 16px; margin-bottom: 16px; }
+    .api-block .desc { font-size: 14px; color: var(--text-dim); margin-bottom: 16px; }
+    .api-block pre { background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; padding: 16px; font-family: var(--font-mono); font-size: 12px; line-height: 1.7; overflow-x: auto; margin-bottom: 16px; }
+    .api-block code { color: var(--green); }
+    .api-block .code-key { color: var(--blue); }
+    .api-block .code-num { color: var(--orange); }
+    .param-table { width: 100%; border-collapse: collapse; font-size: 13px; }
+    .param-table th { text-align: left; font-family: var(--font-mono); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; color: var(--text-dim); padding: 8px 12px; border-bottom: 1px solid var(--border); }
+    .param-table td { padding: 8px 12px; border-bottom: 1px solid var(--border); font-family: var(--font-mono); font-size: 12px; }
+    .param-table td:first-child { color: var(--blue); }
+    .param-table .param-desc { font-family: var(--font-ui); color: var(--text-dim); font-size: 12px; }
+    @media (max-width: 700px) { .docs-sidebar { display: none; } .docs-content { padding-left: 0; border-left: none; } }
+  </style>
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html#features" class="nav-link">功能</a>
+        <a href="index.html#how-it-works" class="nav-link">原理</a>
+        <a href="download.html" class="nav-link">下载</a>
+        <a href="https://github.com/i3xai/iainote" class="nav-link nav-github" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </nav>
+      <a href="download.html" class="btn btn-primary">下载 CLI</a>
+    </div>
+  </header>
+
+  <div class="docs-layout">
+    <!-- Sidebar -->
+    <aside class="docs-sidebar">
+      <div class="sidebar-title">文档</div>
+      <a href="#auth" class="sidebar-link active">认证</a>
+      <a href="#notes" class="sidebar-link">笔记</a>
+      <a href="#tags" class="sidebar-link">标签</a>
+      <a href="#ai" class="sidebar-link">AI 接口</a>
+      <a href="#keys" class="sidebar-link">Key 管理</a>
+
+      <div class="sidebar-title" style="margin-top:24px;">基础 URL</div>
+      <code style="font-size:11px;color:var(--green);font-family:var(--font-mono);">https://api.iaiaiai.cc/v1</code>
+    </aside>
+
+    <!-- Content -->
+    <main class="docs-content">
+
+      <!-- Auth -->
+      <section id="auth">
+        <h2 style="font-family:var(--font-mono);font-size:28px;margin-bottom:8px;">认证</h2>
+        <p style="color:var(--text-dim);font-size:14px;margin-bottom:32px;">所有 API 请求需要在 Header 中携带 API Key：</p>
+
+        <div class="api-block">
+          <h3>获取 Access Token</h3>
+          <p class="desc">通过邮箱密码登录，获取短期 JWT Token（有效期 7 天）</p>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/auth/login</span>
+          </div>
+          <pre><code>{
+  <span class="code-key">"email"</span>: <span class="code-num">"user@example.com"</span>,
+  <span class="code-key">"password"</span>: <span class="code-num">"your_password"</span>
+}</code></pre>
+        </div>
+
+        <div class="api-block">
+          <h3>注册账号</h3>
+          <p class="desc">创建新账号</p>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/auth/register</span>
+          </div>
+          <pre><code>{
+  <span class="code-key">"email"</span>: <span class="code-num">"user@example.com"</span>,
+  <span class="code-key">"password"</span>: <span class="code-num">"your_password"</span>
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- Notes -->
+      <section id="notes" style="margin-top:64px;">
+        <h2 style="font-family:var(--font-mono);font-size:28px;margin-bottom:8px;">笔记</h2>
+
+        <div class="api-block">
+          <h3>创建笔记</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/notes</span>
+          </div>
+          <table class="param-table" style="margin-bottom:16px;">
+            <tr><th>参数</th><th>类型</th><th>说明</th></tr>
+            <tr><td>title</td><td>string</td><td class="param-desc">笔记标题，必填</td></tr>
+            <tr><td>content</td><td>string</td><td class="param-desc">Markdown 正文内容，必填</td></tr>
+            <tr><td>tags</td><td>string[]</td><td class="param-desc">标签数组，可选</td></tr>
+            <tr><td>visibility</td><td>string</td><td class="param-desc">private / shared，默认 private</td></tr>
+          </table>
+          <pre><code>{
+  <span class="code-key">"title"</span>: <span class="code-num">"FRP 内网穿透配置笔记"</span>,
+  <span class="code-key">"content"</span>: <span class="code-num">"## 服务器端配置\n\nbind_port = 7000"</span>,
+  <span class="code-key">"tags"</span>: [<span class="code-num">"frp"</span>, <span class="code-num">"vps"</span>],
+  <span class="code-key">"visibility"</span>: <span class="code-num">"private"</span>
+}</code></pre>
+        </div>
+
+        <div class="api-block">
+          <h3>搜索笔记</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-get">GET</span>
+            <span class="endpoint-path">/notes/search?q=&tags=&limit=</span>
+          </div>
+          <pre><code>{
+  <span class="code-key">"results"</span>: [
+    {
+      <span class="code-key">"id"</span>: <span class="code-num">"550e8400-e29b-41d4-a716-446655440000"</span>,
+      <span class="code-key">"title"</span>: <span class="code-num">"FRP 内网穿透配置笔记"</span>,
+      <span class="code-key">"snippet"</span>: <span class="code-num">"...服务器配置在 <mark>/etc/frp</mark>..."</span>,
+      <span class="code-key">"tags"</span>: [<span class="code-num">"frp"</span>, <span class="code-num">"vps"</span>],
+      <span class="code-key">"score"</span>: <span class="code-num">0.95</span>
+    }
+  ],
+  <span class="code-key">"total"</span>: <span class="code-num">1</span>,
+  <span class="code-key">"took_ms"</span>: <span class="code-num">12</span>
+}</code></pre>
+        </div>
+
+        <div class="api-block">
+          <h3>更新笔记</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-put">PUT</span>
+            <span class="endpoint-path">/notes/{id}</span>
+          </div>
+          <p class="desc">支持版本号乐观锁，传入 version 防止并发覆盖冲突</p>
+        </div>
+
+        <div class="api-block">
+          <h3>删除笔记</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-delete">DELETE</span>
+            <span class="endpoint-path">/notes/{id}</span>
+          </div>
+        </div>
+      </section>
+
+      <!-- AI -->
+      <section id="ai" style="margin-top:64px;">
+        <h2 style="font-family:var(--font-mono);font-size:28px;margin-bottom:8px;">AI 专用接口</h2>
+        <p style="color:var(--text-dim);font-size:14px;margin-bottom:32px;">专为 AI 模型设计的接口，返回结构化 JSON，适合在 System Prompt 中调用</p>
+
+        <div class="api-block">
+          <h3>AI 检索笔记</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-get">GET</span>
+            <span class="endpoint-path">/ai/search?q=&tags=&limit=&match_all=</span>
+          </div>
+          <p class="desc">模糊检索，返回高亮 snippet，支持标签过滤和多关键词 AND 匹配</p>
+        </div>
+
+        <div class="api-block">
+          <h3>AI 批量写入</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/ai/ingest</span>
+          </div>
+          <p class="desc">AI 从对话中提取关键信息批量写入笔记，支持 auto_tag 自动打标签</p>
+          <pre><code>{
+  <span class="code-key">"title"</span>: <span class="code-num">"用户配置了 FRP 内网穿透"</span>,
+  <span class="code-key">"content"</span>: <span class="code-num">"用户使用阿里云轻量服务器..."</span>,
+  <span class="code-key">"tags"</span>: [<span class="code-num">"frp"</span>, <span class="code-num">"阿里云"</span>],
+  <span class="code-key">"auto_tag"</span>: <span class="code-num">true</span>
+}</code></pre>
+        </div>
+      </section>
+
+      <!-- Keys -->
+      <section id="keys" style="margin-top:64px;">
+        <h2 style="font-family:var(--font-mono);font-size:28px;margin-bottom:8px;">Key 管理</h2>
+
+        <div class="api-block">
+          <h3>合并 Key 数据</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/keys/{id}/merge</span>
+          </div>
+          <p class="desc">将指定 Key 的所有笔记迁移合并到当前 Key，数据源 Key 清空</p>
+        </div>
+
+        <div class="api-block">
+          <h3>迁移 Key 数据</h3>
+          <div class="api-endpoint">
+            <span class="method-badge method-post">POST</span>
+            <span class="endpoint-path">/keys/{id}/transfer</span>
+          </div>
+          <p class="desc">将指定 Key 的所有笔记转移到另一个 Key</p>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+        <p class="footer-tagline">记录 AI 的经验，让智能持续进化。</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>产品</h4>
+          <a href="index.html#features">功能介绍</a>
+          <a href="index.html#how-it-works">工作原理</a>
+          <a href="download.html">下载 CLI</a>
+        </div>
+        <div class="footer-col">
+          <h4>开发者</h4>
+          <a href="https://github.com/i3xai/iainote" target="_blank">GitHub</a>
+          <a href="docs.html">API 文档</a>
+          <a href="https://github.com/i3xai/iainote/issues" target="_blank">反馈问题</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 iainote · MIT License · 开源免费</span>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>

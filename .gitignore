@@ -1,0 +1,35 @@
+# Rust
+/target
+**/target
+*.pdb
+*.rlib
+*.so
+Cargo.lock
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*
+
+# Node (if any)
+node_modules/
+
+# Temporary
+*.tmp
+*.bak
+*.orig

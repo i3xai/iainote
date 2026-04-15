@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>下载 iainote CLI - AI 时代的云端笔记系统</title>
+  <meta name="description" content="下载 iainote CLI 客户端，一条命令完成安装，支持 Linux、macOS、Windows。">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><text x='4' y='24' font-size='20' fill='%2300ff88'>i</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+      </a>
+      <nav class="nav">
+        <a href="index.html#features" class="nav-link">功能</a>
+        <a href="index.html#how-it-works" class="nav-link">原理</a>
+        <a href="#download" class="nav-link">下载</a>
+        <a href="https://github.com/i3xai/iainote" class="nav-link nav-github" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub
+        </a>
+      </nav>
+      <a href="index.html" class="btn btn-primary">返回主页</a>
+    </div>
+  </header>
+
+  <!-- Download Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        v1.0 Coming Soon · MIT License
+      </div>
+      <h1 class="hero-title">
+        下载 iainote CLI
+      </h1>
+      <p class="hero-sub">
+        一条命令完成安装，支持 Linux、macOS、Windows（WSL）<br>
+        安装完成后，运行 <code>iainote auth login</code> 即可开始
+      </p>
+    </div>
+  </section>
+
+  <!-- Install Commands -->
+  <section class="terminal-section" id="download">
+    <div class="terminal-section-inner">
+
+      <!-- Linux -->
+      <div class="platform-block" id="linux">
+        <div class="platform-label">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#00ff88">
+            <path d="M12.504 0c-.155 0-.315.008.48.06.466.034.945.094 1.38.157.435.062.9.16 1.335.255.435.095.855.21 1.11.345.255.135.24.27.18.39-.06.12-.21.09-.36.075-.15-.015-.345-.045-.555-.09-.21-.044-.435-.104-.645-.135-.21-.03-.45-.045-.63-.06-.18-.014-.33-.044-.39-.044-.06 0-.18.015-.36.06-.18.044-.39.09-.585.135-.21.06-.42.09-.6.12-.18.03-.315.045-.495.045-.21 0-.36-.06-.48-.18-.12-.12-.15-.285-.075-.45.075-.165.24-.285.39-.39.165-.105.36-.195.54-.255.18-.06.39-.135.585-.21.195-.075.36-.165.495-.195.135-.03.27-.06.39-.09.12-.03.18-.06.24-.075.06-.015.09-.045.105-.09.015-.045.015-.105-.015-.18-.03-.075-.075-.165-.135-.255-.06-.09-.135-.18-.24-.285-.105-.105-.225-.195-.345-.27-.12-.075-.255-.15-.405-.21-.15-.06-.3-.105-.45-.135-.15-.03-.315-.06-.465-.075-.15-.015-.3 0-.435.015-.135.015-.24.045-.33.075-.09.03-.18.075-.255.12-.075.045-.135.09-.18.135-.045.045-.09.105-.105.15-.015.045-.03.12 0 .195.03.075.09.15.165.24.075.09.165.18.27.285.105.105.24.195.36.27.12.075.27.135.42.18.15.045.315.075.48.09.165.015.345.015.51 0 .165-.015.33-.045.48-.09.15-.045.285-.12.405-.195.12-.075.225-.165.315-.255.09-.09.165-.18.225-.285.06-.105.105-.21.12-.3.015-.09.015-.18 0-.255-.015-.075-.045-.15-.075-.225-.03-.075-.075-.135-.135-.21-.06-.075-.12-.15-.195-.225-.075-.075-.18-.15-.27-.21-.105-.06-.21-.12-.33-.18-.12-.06-.24-.105-.375-.15-.135-.045-.285-.075-.435-.105-.15-.03-.315-.045-.48-.045-.165 0-.345.015-.525.045-.18.03-.36.09-.54.165-.18.075-.345.18-.51.3-.165.12-.315.255-.45.39-.135.135-.255.3-.36.465-.105.165-.18.33-.24.495-.06.165-.105.33-.12.48-.015.15 0 .285.03.39.03.105.09.18.18.225.09.045.21.045.36 0 .15-.045.33-.12.51-.225.18-.105.375-.24.555-.39.18-.15.345-.33.48-.525.135-.195.24-.39.315-.585.075-.195.12-.375.135-.54.015-.165-.015-.3-.075-.39-.06-.09-.165-.15-.3-.165-.135-.015-.315.015-.51.09-.195.075-.42.195-.645.345-.225.15-.45.33-.66.525-.21.195-.405.405-.585.615-.18.21-.345.42-.48.63-.135.21-.24.405-.315.585-.075.18-.12.33-.135.45-.015.12.015.21.09.27.075.06.195.06.36 0 .165-.06.375-.18.6-.345.225-.165.48-.39.735-.645.255-.255.525-.54.795-.855.27-.315.54-.645.795-.975.255-.33.48-.645.66-.945.18-.3.315-.57.405-.81.09-.24.12-.435.09-.585-.03-.15-.12-.255-.27-.315-.15-.06-.36-.045-.63.045-.27.09-.585.27-.945.525-.36.255-.75.585-1.14.975-.39.39-.78.84-1.14 1.335-.36.495-.675 1.005-.915 1.515-.24.51-.405.99-.48 1.425-.075.435-.03.81.12 1.11.15.3.42.51.81.615.39.105.87.075 1.425-.09.555-.165 1.17-.45 1.8-.855.63-.405 1.29-.93 1.95-1.545.66-.615 1.305-1.32 1.905-2.085.6-.765 1.125-1.545 1.545-2.31.42-.765.75-1.485.96-2.13.21-.645.315-1.2.315-1.635 0-.435-.105-.78-.315-1.02-.21-.24-.54-.39-.99-.45-.45-.06-1.02.015-1.68.225-.66.21-1.41.585-2.22 1.11-.81.525-1.68 1.26-2.58 2.175-.9.915-1.815 2.025-2.715 3.285-.9 1.26-1.71 2.655-2.4 4.14-.69 1.485-1.23 3.045-1.59 4.62-.36 1.575-.54 3.12-.54 4.59 0 1.47.18 2.82.54 4.02.36 1.2.87 2.25 1.5 3.12.63.87 1.38 1.53 2.22 1.98.84.45 1.77.72 2.76.81.99.09 1.98.015 2.94-.225.96-.24 1.86-.645 2.67-1.2.81-.555 1.53-1.29 2.13-2.19.6-.9 1.05-1.95 1.32-3.12.27-1.17.36-2.505.27-3.975-.09-1.47-.36-3.06-.81-4.74-.45-1.68-1.08-3.375-1.86-5.025-.78-1.65-1.71-3.18-2.76-4.545-1.05-1.365-2.22-2.52-3.45-3.435-1.23-.915-2.52-1.605-3.81-2.055-1.29-.45-2.55-.645-3.72-.585z"/></svg>
+          Linux (x86_64)
+        </div>
+        <div class="install-cmd">
+          <code id="install-cmd-linux">curl -fsSL https://iaiaiai.cc/install.sh | bash</code>
+          <button class="copy-btn" onclick="copyInstall('install-cmd-linux')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            复制
+          </button>
+        </div>
+        <p class="platform-note">或手动下载：<a href="https://github.com/i3xai/iainote/releases" target="_blank">GitHub Releases →</a></p>
+      </div>
+
+      <!-- macOS -->
+      <div class="platform-block" id="macos">
+        <div class="platform-label">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#00d4ff">
+            <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.8-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M13 3.5c.73-.83 1.94-1.46 2.94-1.5.13 1.17-.34 2.35-1.04 3.19-.69.85-1.83 1.51-2.95 1.42-.15-1.15.41-2.35 1.05-3.11z"/>
+          </svg>
+          macOS (Apple Silicon + Intel)
+        </div>
+        <div class="install-cmd">
+          <code id="install-cmd-macos">curl -fsSL https://iaiaiai.cc/install.sh | bash</code>
+          <button class="copy-btn" onclick="copyInstall('install-cmd-macos')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            复制
+          </button>
+        </div>
+        <p class="platform-note">macOS 用户也可以用 Homebrew：<code>brew install i3xai/tap/iainote</code></p>
+      </div>
+
+      <!-- Windows WSL -->
+      <div class="platform-block" id="windows">
+        <div class="platform-label">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="#ff6b35">
+            <path d="M0 3.449L9.75 2.1v9.451H0m10.949-9.602L24 0v11.4H10.949M0 12.6h9.75v9.451L0 20.699M10.949 12.6H24V24l-12.9-1.801"/>
+          </svg>
+          Windows (WSL2)
+        </div>
+        <div class="install-cmd">
+          <code id="install-cmd-wsl">curl -fsSL https://iaiaiai.cc/install.sh | bash</code>
+          <button class="copy-btn" onclick="copyInstall('install-cmd-wsl')">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+            </svg>
+            复制
+          </button>
+        </div>
+        <p class="platform-note">请在 WSL2 终端（Ubuntu/Debian）中运行上述命令</p>
+      </div>
+
+      <!-- 手动下载 -->
+      <div class="platform-block" id="other">
+        <div class="platform-label">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          其他平台 / 手动安装
+        </div>
+        <p class="platform-desc">
+          如果自动安装脚本不适用，请前往 GitHub Releases 页面手动下载对应平台的二进制文件：
+        </p>
+        <a href="https://github.com/i3xai/iainote/releases" target="_blank" class="btn btn-outline" style="margin-top: 12px;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/></svg>
+          GitHub Releases
+        </a>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- Next Steps -->
+  <section class="features">
+    <div class="features-inner">
+      <div class="section-label">安装完成后</div>
+      <h2 class="section-title">快速开始</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">1. 登录账号</h3>
+          <p class="feature-desc"><code>iainote auth login</code><br>输入邮箱和密码，创建你的第一个 API Key</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+              <path d="M12 20h9"/><path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">2. 创建笔记</h3>
+          <p class="feature-desc"><code>iainote note new</code><br>交互式创建你的第一条笔记，支持 Markdown</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">3. 搜索笔记</h3>
+          <p class="feature-desc"><code>iainote search &lt;关键词&gt;</code><br>毫秒级全文检索，支持标签过滤</p>
+        </div>
+      </div>
+      <div style="text-align:center;margin-top:40px;">
+        <a href="docs.html" class="btn btn-outline btn-lg">查看完整文档</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+        <p class="footer-tagline">记录 AI 的经验，让智能持续进化。</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>产品</h4>
+          <a href="index.html#features">功能介绍</a>
+          <a href="index.html#how-it-works">工作原理</a>
+          <a href="#download">下载 CLI</a>
+        </div>
+        <div class="footer-col">
+          <h4>开发者</h4>
+          <a href="https://github.com/i3xai/iainote" target="_blank">GitHub</a>
+          <a href="docs.html">API 文档</a>
+          <a href="https://github.com/i3xai/iainote/issues" target="_blank">反馈问题</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 iainote · MIT License · 开源免费</span>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+  <script>
+    function copyInstall(id) {
+      const el = document.getElementById(id);
+      navigator.clipboard.writeText(el.textContent.trim()).then(() => {
+        const btn = el.parentElement.querySelector('.copy-btn');
+        btn.textContent = '已复制!';
+        setTimeout(() => btn.innerHTML = '<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg> 复制', 1500);
+      });
+    }
+  </script>
+</body>
+</html>

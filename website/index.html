@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>iainote - AI 时代的云端笔记系统</title>
+  <meta name="description" content="为 AI 打造的云端笔记系统。CLI 管理、API 读写、数据隔离、模糊检索。开源免费。安装命令：curl -fsSL https://iaiaiai.cc/install.sh | bash">
+  <meta property="og:title" content="iainote - AI-Native Cloud Notes">
+  <meta property="og:description" content="记录 AI 的经验，让 AI 和人类共同访问。开源项目。">
+  <meta property="og:type" content="website">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><rect width='32' height='32' fill='%230a0a0a'/><text x='4' y='24' font-size='20' fill='%2300ff88'>i</text></svg>">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles/main.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="/" class="logo">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+      </a>
+      <nav class="nav">
+        <a href="#features" class="nav-link">功能</a>
+        <a href="#how-it-works" class="nav-link">原理</a>
+        <a href="#download" class="nav-link">下载</a>
+        <a href="https://github.com/i3xai/iainote" class="nav-link nav-github" target="_blank">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          GitHub
+        </a>
+      </nav>
+      <a href="#download" class="btn btn-primary">开始使用</a>
+    </div>
+  </header>
+
+  <!-- Hero -->
+  <section class="hero">
+    <div class="hero-inner">
+      <div class="hero-badge">
+        <span class="badge-dot"></span>
+        开源项目 · MIT License
+      </div>
+      <h1 class="hero-title">
+        AI 时代的云端笔记<br>
+        <span class="hero-title-accent">为 AI & 人类共建</span>
+      </h1>
+      <p class="hero-sub">
+        iainote 是一个双端笔记系统。<strong>AI 通过 API 读写</strong>，<strong>人类通过 CLI 管理</strong>，<br>
+        让 AI 的经验可存储、可访问、可复用，数据完全归属你自己。
+      </p>
+      <div class="hero-cta">
+        <a href="#download" class="btn btn-primary btn-lg">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4M7 10l5 5 5-5M12 15V3"/>
+          </svg>
+          下载 CLI
+        </a>
+        <a href="https://github.com/i3xai/iainote" class="btn btn-ghost btn-lg" target="_blank">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+          </svg>
+          查看 GitHub
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Terminal Demo -->
+  <section class="terminal-section">
+    <div class="terminal-section-inner">
+      <div class="terminal-window">
+        <div class="terminal-bar">
+          <div class="terminal-dots">
+            <span class="dot dot-red"></span>
+            <span class="dot dot-yellow"></span>
+            <span class="dot dot-green"></span>
+          </div>
+          <div class="terminal-title">iainote — terminal</div>
+        </div>
+        <div class="terminal-body" id="terminal-output">
+          <div class="terminal-line line-cmd">$ iainote auth login</div>
+          <div class="terminal-line line-out">&gt; 登录成功，欢迎回来！</div>
+          <div class="terminal-line line-cmd">$ iainote note new</div>
+          <div class="terminal-line line-out">&gt; 标题: FRP 内网穿透完整指南</div>
+          <div class="terminal-line line-out">&gt; 标签: frp, vps, 网络配置</div>
+          <div class="terminal-line line-out">&gt; 正文: <span class="cursor" id="cursor">|</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Features -->
+  <section class="features" id="features">
+    <div class="features-inner">
+      <div class="section-label">核心功能</div>
+      <h2 class="section-title">专为 AI 时代设计的笔记系统</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">AI-First API</h3>
+          <p class="feature-desc">原生 JSON API，AI 可直接读写笔记。结构化返回、模糊检索、多标签过滤，无需解析富文本。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+              <polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Terminal-First CLI</h3>
+          <p class="feature-desc">极客体验，无需浏览器。所有操作通过命令行完成：创建笔记、搜索、打标签、查看同步。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="2">
+              <rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">Key 级数据隔离</h3>
+          <p class="feature-desc">每个 AI 独立 Key，数据天然隔离。同用户 Key 之间支持迁移和合并，灵活管理多 AI 记忆。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00ff88" stroke-width="2">
+              <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">模糊全文检索</h3>
+          <p class="feature-desc">基于 PostgreSQL 全文搜索，支持标题、内容、标签多维检索，返回高亮 snippet，毫秒级响应。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#00d4ff" stroke-width="2">
+              <path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">标签分类体系</h3>
+          <p class="feature-desc">支持给笔记打多个标签，标签支持自定义命名，笔记可按标签分组、过滤、批量管理。</p>
+        </div>
+        <div class="feature-card">
+          <div class="feature-icon">
+            <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#ff6b35" stroke-width="2">
+              <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+            </svg>
+          </div>
+          <h3 class="feature-title">完全开源</h3>
+          <p class="feature-desc">MIT 开源许可证，代码完全透明，可自行部署到任意服务器，数据100%归属用户，无供应商锁定。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- How it Works -->
+  <section class="how-it-works" id="how-it-works">
+    <div class="how-it-works-inner">
+      <div class="section-label">工作原理</div>
+      <h2 class="section-title">三步开始使用</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="step-num">01</div>
+          <div class="step-content">
+            <h3 class="step-title">注册并创建 Key</h3>
+            <p class="step-desc">注册账号后，为你的 AI（Claude、GPT、本地模型等）创建专属 API Key，每个 Key 代表一个 AI 身份。</p>
+            <div class="step-code">
+              <code>iainote auth key create "我的Claude"</code>
+            </div>
+          </div>
+        </div>
+        <div class="step-connector">→</div>
+        <div class="step">
+          <div class="step-num">02</div>
+          <div class="step-content">
+            <h3 class="step-title">AI 通过 API 读写笔记</h3>
+            <p class="step-desc">在你的 AI System Prompt 中加入 API 调用指令，AI 即可在回答前后读写笔记，实现持久记忆。</p>
+            <div class="step-code">
+              <code>curl -H "Authorization: Bearer &lt;KEY&gt;" \<br>&nbsp;&nbsp;"https://api.iaiaiai.cc/v1/ai/search?q=FRP"</code>
+            </div>
+          </div>
+        </div>
+        <div class="step-connector">→</div>
+        <div class="step">
+          <div class="step-num">03</div>
+          <div class="step-content">
+            <h3 class="step-title">人类通过 CLI 管理</h3>
+            <p class="step-desc">用 CLI 工具查询、整理、编辑笔记，支持模糊搜索和标签管理，所有数据实时同步。</p>
+            <div class="step-code">
+              <code>iainote search FRP &amp;&amp; iainote note list --tag=vps</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Code Example -->
+  <section class="code-example">
+    <div class="code-example-inner">
+      <div class="section-label">API 示例</div>
+      <h2 class="section-title">简单清晰，AI 直接调用</h2>
+      <div class="code-split">
+        <div class="code-panel">
+          <div class="code-panel-label">// 请求</div>
+          <pre class="code-block"><code><span class="code-comment"># AI 检索笔记</span>
+curl -X GET <span class="code-str">"https://api.iaiaiai.cc/v1/ai/search"</span> \
+  -H <span class="code-str">"Authorization: Bearer ia_sk_xxxx"</span> \
+  -d <span class="code-str">"q=FRP+vps&limit=5"</span>
+
+<span class="code-comment"># AI 写入笔记</span>
+curl -X POST <span class="code-str">"https://api.iaiaiai.cc/v1/ai/ingest"</span> \
+  -H <span class="code-str">"Authorization: Bearer ia_sk_xxxx"</span> \
+  -H <span class="code-str">"Content-Type: application/json"</span> \
+  -d '{
+    <span class="code-str">"title": "FRP 配置总结"</span>,
+    <span class="code-str">"content": "..."</span>,
+    <span class="code-str">"tags": ["frp", "vps"]</span>
+  }'</code></pre>
+        </div>
+        <div class="code-panel">
+          <div class="code-panel-label">// 响应</div>
+          <pre class="code-block"><code>{
+  <span class="code-key">"results"</span>: [
+    {
+      <span class="code-key">"id"</span>: <span class="code-str">"550e8400-..."</span>,
+      <span class="code-key">"title"</span>: <span class="code-str">"FRP 内网穿透完整指南"</span>,
+      <span class="code-key">"snippet"</span>: <span class="code-str">"...服务器配置在 <mark>/etc/frp</mark>..."</span>,
+      <span class="code-key">"tags"</span>: [<span class="code-str">"frp"</span>, <span class="code-str">"vps"</span>],
+      <span class="code-key">"score"</span>: <span class="code-num">0.95</span>
+    }
+  ],
+  <span class="code-key">"total"</span>: <span class="code-num">1</span>,
+  <span class="code-key">"took_ms"</span>: <span class="code-num">12</span>
+}</code></pre>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Download CTA -->
+  <section class="download-cta" id="download">
+    <div class="download-cta-inner">
+      <div class="download-box">
+        <div class="section-label">立即开始</div>
+        <h2 class="download-title">安装 iainote CLI</h2>
+        <p class="download-desc">一条命令完成安装，支持 Linux、macOS、Windows（WSL）</p>
+        <div class="install-block">
+          <div class="install-cmd">
+            <code id="install-cmd">curl -fsSL https://iaiaiai.cc/install.sh | bash</code>
+            <button class="copy-btn" onclick="copyInstall()">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+              </svg>
+              复制
+            </button>
+          </div>
+        </div>
+        <div class="platform-btns">
+          <a href="download.html#linux" class="btn btn-outline">Linux</a>
+          <a href="download.html#macos" class="btn btn-outline">macOS</a>
+          <a href="download.html#windows" class="btn btn-outline">Windows (WSL)</a>
+          <a href="download.html" class="btn btn-outline">其他平台</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Open Source Banner -->
+  <section class="oss-banner">
+    <div class="oss-banner-inner">
+      <div class="oss-icon">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="#00ff88">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+      </div>
+      <div class="oss-text">
+        <h3>100% 开源 · MIT 许可证</h3>
+        <p>所有源代码在 GitHub 上完全公开，可自由部署、修改、分发。</p>
+      </div>
+      <a href="https://github.com/i3xai/iainote" class="btn btn-outline-green" target="_blank">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor">
+          <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0 0 24 12c0-6.63-5.37-12-12-12z"/>
+        </svg>
+        查看源码
+      </a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <span class="logo-icon">⬡</span>
+        <span class="logo-text">iainote</span>
+        <p class="footer-tagline">记录 AI 的经验，让智能持续进化。</p>
+      </div>
+      <div class="footer-links">
+        <div class="footer-col">
+          <h4>产品</h4>
+          <a href="#features">功能介绍</a>
+          <a href="#how-it-works">工作原理</a>
+          <a href="#download">下载 CLI</a>
+        </div>
+        <div class="footer-col">
+          <h4>开发者</h4>
+          <a href="https://github.com/i3xai/iainote" target="_blank">GitHub</a>
+          <a href="docs.html">API 文档</a>
+          <a href="https://github.com/i3xai/iainote/issues" target="_blank">反馈问题</a>
+        </div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 iainote · MIT License · 开源免费</span>
+    </div>
+  </footer>
+
+  <script src="scripts/main.js"></script>
+</body>
+</html>
