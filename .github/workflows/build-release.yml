@@ -68,6 +68,13 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
+
       - name: Build ${{ matrix.binary }} for ${{ matrix.target }}
         run: cargo build --release --bin ${{ matrix.binary }} --target ${{ matrix.target }}
 

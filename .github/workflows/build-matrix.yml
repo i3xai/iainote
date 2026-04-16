@@ -39,7 +39,7 @@ jobs:
           file target/${{ matrix.target }}/release/${{ matrix.binary }}
           echo "Binary built OK"
 
-  # macOS targets — 必须在 macOS-latest  runners 上原生编译
+  # macOS targets — 必须在 macOS-latest runners 上原生编译
   build-macos:
     strategy:
       fail-fast: false
@@ -53,6 +53,13 @@ jobs:
     runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+          target: ${{ matrix.target }}
+          override: true
 
       - name: Build ${{ matrix.binary }} (${{ matrix.target }})
         run: cargo build --release --bin ${{ matrix.binary }} --target ${{ matrix.target }}
