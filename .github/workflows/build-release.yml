@@ -7,12 +7,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  # Linux binaries — cross compile on ubuntu
+  build-linux:
     strategy:
       fail-fast: false
       matrix:
         include:
-          # CLI tools
           - binary: iainote-cli
             target: x86_64-unknown-linux-musl
             artifact: iainote-linux-amd64
@@ -20,15 +20,8 @@ jobs:
             target: aarch64-unknown-linux-musl
             artifact: iainote-linux-arm64
           - binary: iainote-cli
-            target: x86_64-apple-darwin
-            artifact: iainote-macos-intel
-          - binary: iainote-cli
-            target: aarch64-apple-darwin
-            artifact: iainote-macos-apple-silicon
-          - binary: iainote-cli
             target: armv7-unknown-linux-musleabihf
             artifact: iainote-linux-armv7
-          # Server binary
           - binary: iainote-server
             target: x86_64-unknown-linux-musl
             artifact: iainote-server-linux-amd64
@@ -41,12 +34,10 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Install cross
-        run: |
-          cargo install cross --locked
+        run: cargo install cross --locked
 
       - name: Build ${{ matrix.binary }} for ${{ matrix.target }}
-        run: |
-          cross build --release --bin ${{ matrix.binary }} --target ${{ matrix.target }}
+        run: cross build --release --bin ${{ matrix.binary }} --target ${{ matrix.target }}
 
       - name: Package
         run: |
@@ -60,8 +51,41 @@ jobs:
           path: /tmp/${{ matrix.artifact }}
           retention-days: 30
 
+  # macOS binaries — native compile on macOS runners
+  build-macos:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - binary: iainote-cli
+            target: x86_64-apple-darwin
+            artifact: iainote-macos-intel
+          - binary: iainote-cli
+            target: aarch64-apple-darwin
+            artifact: iainote-macos-apple-silicon
+
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build ${{ matrix.binary }} for ${{ matrix.target }}
+        run: cargo build --release --bin ${{ matrix.binary }} --target ${{ matrix.target }}
+
+      - name: Package
+        run: |
+          cp target/${{ matrix.target }}/release/${{ matrix.binary }} /tmp/${{ matrix.artifact }}
+          chmod +x /tmp/${{ matrix.artifact }}
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ matrix.artifact }}
+          path: /tmp/${{ matrix.artifact }}
+          retention-days: 30
+
+  # Collect all artifacts and create GitHub Release
   release:
-    needs: build
+    needs: [build-linux, build-macos]
     runs-on: ubuntu-latest
     if: startsWith(github.ref, 'refs/tags/v')
     permissions:
@@ -73,7 +97,7 @@ jobs:
           path: artifacts
 
       - name: List artifacts
-        run: find artifacts -type f -name "iainote-*" | sort
+        run: find artifacts -type f | sort
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
