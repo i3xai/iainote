@@ -22,12 +22,6 @@ jobs:
           - binary: iainote-cli
             target: armv7-unknown-linux-musleabihf
             artifact: iainote-linux-armv7
-          - binary: iainote-server
-            target: x86_64-unknown-linux-musl
-            artifact: iainote-server-linux-amd64
-          - binary: iainote-server
-            target: aarch64-unknown-linux-musl
-            artifact: iainote-server-linux-arm64
 
     runs-on: ubuntu-latest
     steps:
