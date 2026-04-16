@@ -1,6 +1,6 @@
 use serde::Deserialize;
 use once_cell::sync::Lazy;
-use config::{Config, ConfigError, File};
+use config as config_crate;
 
 #[derive(Debug, Clone, Deserialize)]
 pub struct Config {
@@ -17,12 +17,12 @@ pub static SETTINGS: Lazy<Config> = Lazy::new(|| {
 });
 
 impl Config {
-    pub fn from_env() -> Result<Self, ConfigError> {
-        let config = Config::builder()
-            .add_source(config::Environment::with_prefix("IA").separator("__"))
+    pub fn from_env() -> Result<Self, config_crate::ConfigError> {
+        let cfg = config_crate::Config::builder()
+            .add_source(config_crate::Environment::with_prefix("IA").separator("__"))
             .build()?;
 
-        config.try_deserialize()
+        cfg.try_deserialize()
     }
 }
 
@@ -31,7 +31,7 @@ impl Default for Config {
         Self {
             server_addr: "0.0.0.0:8080".to_string(),
             database_url: std::env::var("DATABASE_URL")
-                .unwrap_or_else(|_| "postgres://iainote:password@localhost:5432/iainote".to_string()),
+                .unwrap_or_else(|_| "postgres://iainote:***@localhost:5432/iainote".to_string()),
             redis_url: std::env::var("REDIS_URL").ok(),
             jwt_secret: std::env::var("JWT_SECRET")
                 .unwrap_or_else(|_| "dev_secret_change_in_production".to_string()),

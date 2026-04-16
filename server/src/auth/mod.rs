@@ -1,7 +1,7 @@
 use actix_web::{web, HttpRequest, HttpResponse};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
-use argon2::{Argon2, PasswordHash, PasswordVerifier, PasswordHasher};
+use argon2::{Argon2, PasswordHash, PasswordVerifier};
 use sha2::{Sha256, Digest};
 use hex;
 use jsonwebtoken::{encode, decode, Header, EncodingKey, DecodingKey, Validation};
@@ -11,7 +11,7 @@ use uuid::Uuid;
 use crate::error::{AppError, Result};
 use crate::AppState;
 
-#[derive(Debug, Serialize, Deserialize)]
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct Claims {
     pub sub: String,      // user_id
     pub key_id: Option<String>,
@@ -59,9 +59,11 @@ pub struct TokenResponse {
 }
 
 fn hash_password(password: &str) -> Result<String> {
-    let salt = rand::random::<[u8; 16]>();
-    let argon2 = Argon2::default();
-    let hash = argon2.hash_password(password, &salt)
+    use argon2::PasswordHasher;
+    let salt_b64 = base64::Engine::encode(&base64::engine::general_purpose::STANDARD, &rand::random::<[u8; 16]>());
+    let salt = password_hash::SaltString::from_b64(&salt_b64).unwrap();
+    let hash = Argon2::default()
+        .hash_password(password.as_bytes(), &salt)
         .map_err(|e| AppError::Internal(e.to_string()))?;
     Ok(hash.to_string())
 }
@@ -104,12 +106,12 @@ pub fn extract_token(req: &HttpRequest) -> Option<String> {
         .map(|s| s.to_string())
 }
 
-pub async fn verify_token(req: &HttpRequest, state: &AppState) -> Result<Claims> {
+pub async fn verify_token(req: &HttpRequest, jwt_secret: &str) -> Result<Claims> {
     let token = extract_token(req).ok_or(AppError::Unauthorized)?;
 
     let token_data = decode::<Claims>(
         &token,
-        &DecodingKey::from_secret(state.config.jwt_secret.as_bytes()),
+        &DecodingKey::from_secret(jwt_secret.as_bytes()),
         &Validation::default(),
     ).map_err(|_| AppError::Unauthorized)?;
 
@@ -159,7 +161,7 @@ pub async fn login(
         return Err(AppError::InvalidCredentials);
     }
 
-    let token = create_jwt(&user.0, None, &state.config.jwt_secret)?;
+    let token = create_jwt(&user.0, None, &state.jwt_secret)?;
 
     Ok(HttpResponse::Ok().json(TokenResponse {
         access_token: token,
@@ -170,9 +172,10 @@ pub async fn login(
 
 pub async fn create_key(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     body: web::Json<CreateKeyRequest>,
 ) -> Result<HttpResponse> {
+    let claims = super::auth_middleware::validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
 
     // Generate API key
@@ -200,8 +203,9 @@ pub async fn create_key(
 
 pub async fn list_keys(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
 ) -> Result<HttpResponse> {
+    let claims = super::auth_middleware::validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
 
     let keys: Vec<(Uuid, String, chrono::DateTime<Utc>, bool)> = sqlx::query_as(
@@ -226,9 +230,10 @@ pub async fn list_keys(
 
 pub async fn delete_key(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
 ) -> Result<HttpResponse> {
+    let claims = super::auth_middleware::validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let key_id: Uuid = path.into_inner().parse().map_err(|_| AppError::InvalidCredentials)?;
 
@@ -244,10 +249,11 @@ pub async fn delete_key(
 
 pub async fn merge_keys(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
     body: web::Json<serde_json::Value>,
 ) -> Result<HttpResponse> {
+    let claims = super::auth_middleware::validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let source_key_id: Uuid = path.into_inner().parse().map_err(|_| AppError::InvalidCredentials)?;
     let target_key_id: Uuid = body["target_key_id"].as_str()
@@ -268,10 +274,11 @@ pub async fn merge_keys(
 
 pub async fn transfer_key(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
     body: web::Json<serde_json::Value>,
 ) -> Result<HttpResponse> {
+    let claims = super::auth_middleware::validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let source_key_id: Uuid = path.into_inner().parse().map_err(|_| AppError::InvalidCredentials)?;
     let target_key_id: Uuid = body["target_key_id"].as_str()

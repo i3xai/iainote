@@ -13,9 +13,10 @@ pub struct TagResponse {
 
 pub async fn list(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
 ) -> Result<HttpResponse> {
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
+    let claims = validate_request(&req, &state.jwt_secret)?;
 
     let tags: Vec<(Uuid, String)> = sqlx::query_as(
         "SELECT id, name FROM tags WHERE user_id = $1 ORDER BY name"
@@ -40,10 +41,11 @@ pub struct CreateTag {
 
 pub async fn create(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     body: web::Json<CreateTag>,
 ) -> Result<HttpResponse> {
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
+    let claims = validate_request(&req, &state.jwt_secret)?;
 
     let tag_id: (Uuid,) = sqlx::query_as(
         r#"INSERT INTO tags (user_id, name) VALUES ($1, $2)
@@ -63,10 +65,11 @@ pub async fn create(
 
 pub async fn delete(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
 ) -> Result<HttpResponse> {
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let tag_id: Uuid = path.into_inner().parse().map_err(|_| AppError::InvalidCredentials)?;
 
     sqlx::query("DELETE FROM tags WHERE id = $1 AND user_id = $2")

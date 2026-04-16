@@ -33,10 +33,11 @@ pub struct AiSearchResult {
 /// Returns structured JSON optimized for AI consumption
 pub async fn search(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     query: web::Query<AiSearchQuery>,
 ) -> Result<HttpResponse> {
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let limit = query.limit.unwrap_or(5).min(20);
 
     let results: Vec<(Uuid, String, String)> = sqlx::query_as(
@@ -79,10 +80,11 @@ pub async fn search(
 /// Allows AI to write notes from conversations
 pub async fn ingest(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     body: web::Json<IngestNote>,
 ) -> Result<HttpResponse> {
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let key_id = claims.key_id.as_ref().map(|k| Uuid::parse_str(k)).transpose()
         .map_err(|_| AppError::Internal("Invalid key_id in token".to_string()))?;
 

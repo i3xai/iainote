@@ -3,8 +3,8 @@ use serde::{Deserialize, Serialize};
 use std::sync::Arc;
 
 mod auth;
+mod auth_middleware;
 mod notes;
-mod search;
 mod tags;
 mod ai;
 mod db;
@@ -12,11 +12,11 @@ mod error;
 mod config;
 
 pub use error::{AppError, Result};
-pub use config::Config;
+pub use config::Config as AppConfig;
 
 #[derive(Debug, Clone)]
 pub struct AppState {
-    pub config: Config,
+    pub jwt_secret: String,
     pub db: Arc<db::DbPool>,
 }
 
@@ -48,9 +48,10 @@ fn configure_routes(cfg: &mut web::ServiceConfig) {
                 .route("/keys", web::get().to(auth::list_keys))
                 .route("/keys/{id}", web::delete().to(auth::delete_key))
         )
-        // Notes routes
+        // Notes routes (protected)
         .service(
             web::scope("/api/v1/notes")
+                
                 .route("", web::get().to(notes::list))
                 .route("", web::post().to(notes::create))
                 .route("/{id}", web::get().to(notes::get))
@@ -58,22 +59,25 @@ fn configure_routes(cfg: &mut web::ServiceConfig) {
                 .route("/{id}", web::delete().to(notes::delete))
                 .route("/search", web::get().to(notes::search))
         )
-        // Tags routes
+        // Tags routes (protected)
         .service(
             web::scope("/api/v1/tags")
+                
                 .route("", web::get().to(tags::list))
                 .route("", web::post().to(tags::create))
                 .route("/{id}", web::delete().to(tags::delete))
         )
-        // AI routes
+        // AI routes (protected)
         .service(
             web::scope("/api/v1/ai")
+                
                 .route("/search", web::get().to(ai::search))
                 .route("/ingest", web::post().to(ai::ingest))
         )
-        // Key management
+        // Key management (protected)
         .service(
             web::scope("/api/v1/keys")
+                
                 .route("/{id}/merge", web::post().to(auth::merge_keys))
                 .route("/{id}/transfer", web::post().to(auth::transfer_key))
         );
@@ -90,7 +94,7 @@ async fn main() -> std::io::Result<()> {
         .init();
 
     // Load config
-    let config = Config::from_env().expect("Failed to load configuration");
+    let config = AppConfig::from_env().expect("Failed to load configuration");
 
     // Initialize database
     let db_pool = db::create_pool(&config.database_url)
@@ -110,7 +114,7 @@ async fn main() -> std::io::Result<()> {
             .wrap(middleware::Logger::default())
             .wrap(cors)
             .app_data(web::Data::new(AppState {
-                config: config.clone(),
+                jwt_secret: config.jwt_secret.clone(),
                 db: Arc::new(db_pool.clone()),
             }))
             .app_data(web::JsonConfig::default())

@@ -1,9 +1,9 @@
-use actix_web::{web, HttpResponse};
+use actix_web::{web, HttpResponse, HttpRequest};
 use serde::{Deserialize, Serialize};
 use sqlx::PgPool;
 use uuid::Uuid;
 use crate::error::{AppError, Result};
-use crate::auth::{verify_token, Claims};
+use crate::auth_middleware::validate_request;
 use crate::AppState;
 
 #[derive(Debug, Deserialize)]
@@ -52,15 +52,16 @@ pub struct NoteResponse {
 
 pub async fn list(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     query: web::Query<ListQuery>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let page = query.page.unwrap_or(1).max(1);
-    let limit = query.limit.unwrap_or(20).min(100);
+    let limit = std::cmp::min(query.limit.unwrap_or(20), 100);
     let offset = (page - 1) * limit;
 
-    let notes = sqlx::query_as::<_, (Uuid, String, String, String, i32, Option<Uuid>, chrono::DateTime<chrono::Utc>>, chrono::DateTime<chrono::Utc>)>(
+    let notes = sqlx::query_as::<_, (Uuid, String, String, String, i32, Option<Uuid>, chrono::DateTime<chrono::Utc>, chrono::DateTime<chrono::Utc>)>(
         r#"
         SELECT n.id, n.title, n.content, n.visibility, n.version, n.key_id, n.created_at, n.updated_at
         FROM notes n
@@ -77,7 +78,6 @@ pub async fn list(
     .map_err(|e| AppError::Database(e.to_string()))?;
 
     let response: Vec<NoteResponse> = Vec::new();
-    // TODO: Implement tag loading and response mapping
 
     Ok(HttpResponse::Ok().json(serde_json::json!({
         "notes": response,
@@ -88,9 +88,10 @@ pub async fn list(
 
 pub async fn create(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     body: web::Json<CreateNote>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let key_id = claims.key_id.as_ref().map(|k| Uuid::parse_str(k)).transpose()
         .map_err(|_| AppError::Internal("Invalid key_id in token".to_string()))?;
@@ -127,9 +128,10 @@ pub async fn create(
 
 pub async fn get(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let note_id: Uuid = path.into_inner().parse().map_err(|_| AppError::NotFound)?;
 
@@ -148,7 +150,7 @@ pub async fn get(
                 id: id.to_string(),
                 title,
                 content,
-                tags: vec![], // TODO: load tags
+                tags: vec![],
                 visibility,
                 version,
                 key_id: key_id.map(|k| k.to_string()),
@@ -162,14 +164,14 @@ pub async fn get(
 
 pub async fn update(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
     body: web::Json<UpdateNote>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let note_id: Uuid = path.into_inner().parse().map_err(|_| AppError::NotFound)?;
 
-    // Optimistic locking
     if let Some(expected_version) = body.version {
         let current: Option<(i32,)> = sqlx::query_as(
             "SELECT version FROM notes WHERE id = $1 AND user_id = $2"
@@ -191,7 +193,7 @@ pub async fn update(
     let content = body.content.as_ref().map(|s| s.as_str()).unwrap_or("");
 
     let result = sqlx::query(
-        r#"UPDATE notes SET 
+        r#"UPDATE notes SET
            title = CASE WHEN $3::text <> '' THEN $3 ELSE title END,
            content = CASE WHEN $4::text <> '' THEN $4 ELSE content END,
            visibility = COALESCE($5, visibility),
@@ -220,9 +222,10 @@ pub async fn update(
 
 pub async fn delete(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     path: web::Path<String>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let note_id: Uuid = path.into_inner().parse().map_err(|_| AppError::NotFound)?;
 
@@ -238,9 +241,10 @@ pub async fn delete(
 
 pub async fn search(
     state: web::Data<AppState>,
-    claims: web::ReqData<Claims>,
+    req: HttpRequest,
     query: web::Query<SearchQuery>,
 ) -> Result<HttpResponse> {
+    let claims = validate_request(&req, &state.jwt_secret)?;
     let user_id: Uuid = claims.sub.parse().map_err(|_| AppError::Unauthorized)?;
     let limit = query.limit.unwrap_or(20).min(50);
 
@@ -248,7 +252,7 @@ pub async fn search(
         r#"
         SELECT id, title, left(content, 200), updated_at
         FROM notes
-        WHERE user_id = $1 
+        WHERE user_id = $1
           AND to_tsvector('english', title || ' ' || content) @@ plainto_tsquery('english', $2)
         ORDER BY ts_rank(to_tsvector('english', title || ' ' || content), plainto_tsquery('english', $2)) DESC
         LIMIT $3

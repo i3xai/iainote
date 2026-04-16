@@ -52,13 +52,12 @@ jobs:
         run: |
           cp target/${{ matrix.target }}/release/${{ matrix.binary }} /tmp/${{ matrix.artifact }}
           chmod +x /tmp/${{ matrix.artifact }}
-          tar czf /tmp/${{ matrix.artifact }}.tar.gz -C /tmp ${{ matrix.artifact }}
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
         with:
           name: ${{ matrix.artifact }}
-          path: /tmp/${{ matrix.artifact }}.tar.gz
+          path: /tmp/${{ matrix.artifact }}
           retention-days: 30
 
   release:
@@ -73,22 +72,13 @@ jobs:
         with:
           path: artifacts
 
-      - name: Create tar.gz for each artifact
-        run: |
-          cd artifacts
-          for dir in */; do
-            name="${dir%/}"
-            if [ -f "${name}/${name}" ]; then
-              tar czf "${name}.tar.gz" -C "${name}" .
-              rm -rf "${name}"
-            fi
-          done
-          ls -la
+      - name: List artifacts
+        run: find artifacts -type f -name "iainote-*" | sort
 
       - name: Create Release
         uses: softprops/action-gh-release@v2
         with:
-          files: artifacts/**/*.tar.gz
+          files: artifacts/iainote-*
           generate_release_notes: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

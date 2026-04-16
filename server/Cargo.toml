@@ -38,5 +38,12 @@ config = "0.14"
 # CORS
 actix-cors = "0.7"
 
+# Async
+futures-core = "0.3"
+futures-util = "0.3"
+
+# Password hashing
+password-hash = "0.5"
+
 [dev-dependencies]
 actix-rt = "2"
